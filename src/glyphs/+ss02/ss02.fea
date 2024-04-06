@@ -1,0 +1,7 @@
+feature ss02 {
+  featureNames {
+    name "Alternative Lowercase X";
+  };
+
+  sub x by x.ss02;
+} ss02;

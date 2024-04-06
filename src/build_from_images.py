@@ -217,7 +217,7 @@ def addLigature(parts, path, suffix, lazy = False):
         ligaName = f"{ligaName}{suffix}"
     partNames = [f"{ligaName}.{i}" for i in range(len(parts))]
     with Image.open(path) as atlas:
-        print(f"\"{"".join([chr(getOrd(c)) for c in parts])}\": {atlas.width}x{atlas.height}")
+        print(f"\"{''.join([chr(getOrd(c)) for c in parts])}\": {atlas.width}x{atlas.height}")
         atlas = atlas.convert("1")
 
         x_stride = int(STRIDE_X / scaleFactor)
@@ -322,13 +322,13 @@ def getFamilyName():
     return "Pixel Code"
 
 def getStyleName(weight: int = 400, italicAngle: float = 0.0):
-    return f"{WEIGHT_NAMES[weight]}{" Italic" if italicAngle > 0.0 else ""}"
+    return f"{WEIGHT_NAMES[weight]}{' Italic' if italicAngle > 0.0 else ''}"
 
 def getStyleNameShort(weight: int = 400, italicAngle: float = 0.0):
-    return f"{"Italic" if italicAngle > 0.0 else ""}" if weight == 400 else getStyleName(weight, italicAngle)
+    return f"{'Italic' if italicAngle > 0.0 else ''}" if weight == 400 else getStyleName(weight, italicAngle)
 
 def getFullNameShort(weight: int = 400, italicAngle: float = 0.0):
-    return f"{getFamilyName().replace(" ", "")} {getStyleNameShort(weight, italicAngle)}".rstrip().replace(" ", "-")
+    return f"{getFamilyName().replace(' ', '')} {getStyleNameShort(weight, italicAngle)}".rstrip().replace(" ", "-")
 
 def writeUFO(weight: int = 400, italicAngle: float = 0.0):
     ufo = Font()
@@ -481,11 +481,11 @@ def writeUFO(weight: int = 400, italicAngle: float = 0.0):
     ligatures.sort(key = lambda liga: len(liga["from"]), reverse = True)
     for ligature in ligatures:
         if ligature["lazy"]:
-            ligaFea += f"sub space {" ".join([f"{c}'" for c in ligature["from"]])} space by {ligature["name"]};\n"
+            ligaFea += f"sub space {' '.join([f'{c}' for c in ligature['from']])} space by {ligature['name']};\n"
         else:
-            ligaFea += f"sub {" ".join(ligature["from"])} by {ligature["name"]};\n"
+            ligaFea += f"sub {' '.join(ligature['from'])} by {ligature['name']};\n"
     for ligature in ligatures:
-        ligaFea += f"sub {ligature["name"]} by {" ".join(ligature["to"])};\n"
+        ligaFea += f"sub {ligature['name']} by {' '.join(ligature['to'])};\n"
     ligaFea += "} liga;\n"
     combinedFea += ligaFea
     combinedFea += afterLiga

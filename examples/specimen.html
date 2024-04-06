@@ -282,6 +282,10 @@
                 color: #777;
                 font-style: italic;
             }
+
+            textarea {
+                font-family: "Pixel Code", "Comic Sans MS";
+            }
         </style>
     </head>
     <body>
@@ -507,7 +511,13 @@
             ,.,.,.,.,.,. | style has been made available as a togglable feature, so
             .:;,.:;,.:;, | that it can still be used if you preferred it.
         </div>
-        <br><br>
+        <br>
+        <p>(ss02) <input type="checkbox" name="ss02" id="ss02"> <label for="ss02">Disabled</label></p>
+        <h4>Alternative x (ss02)</h4>
+        <div class="ex"><!--
+-->         x
+        </div>
+        <textarea></textarea>
         <div class="bottom-spacer"></div>
 
         <script>
@@ -523,6 +533,7 @@
                 }, "onum" ${+onum
                 }, "liga" ${+liga
                 }, "ss01" ${+ss01
+                }, "ss02" ${+ss02
                 }`;
             }
             update_style();
@@ -554,6 +565,12 @@
             ss01_toggle.addEventListener('input', () => {
                 ss01 = ss01_toggle.checked;
                 ss01_toggle.nextElementSibling.textContent = ss01 ? 'Enabled' : 'Disabled';
+                update_style();
+            });
+            const ss02_toggle = document.getElementById('ss02');
+            ss02_toggle.addEventListener('input', () => {
+                ss02 = ss02_toggle.checked;
+                ss02_toggle.nextElementSibling.textContent = ss02 ? 'Enabled' : 'Disabled';
                 update_style();
             });
         </script>
