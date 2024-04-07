@@ -492,7 +492,7 @@ def writeUFO(weight: int = 400, italicAngle: float = 0.0):
     ligatures.sort(key = lambda liga: len(liga["from"]), reverse = True)
     for ligature in ligatures:
         if ligature["lazy"]:
-            ligaFea += f"sub space {' '.join([f'{c}' for c in ligature['from']])} space by space {ligature['name']} space;\n"
+            ligaFea += f"sub space {' '.join([f'{c}' for c in ligature['from']])} space by {ligature['name']};\n"
         else:
             ligaFea += f"sub {' '.join(ligature['from'])} by {ligature['name']};\n"
     for ligature in ligatures:
