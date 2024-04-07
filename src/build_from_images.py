@@ -292,7 +292,7 @@ def addGlyphsFromDir(dir, suffix = ""):
                     for y in range(0, atlas.height, y_stride):
                         for x in range(0, atlas.width, x_stride):
                             glyph = atlas.crop((x, y, x + x_stride, y + y_stride))
-                            if c in WHITESPACE_GLYPHS or len(glyph.getcolors()) > 1:
+                            if c in WHITESPACE_GLYPHS or len(glyph.getcolors() or ()) > 1:
                                 name = glyphName(c)
                                 if suffix:
                                     name = f"{name}{suffix}"
@@ -317,6 +317,11 @@ with Image.open("./glyphs/_.notdef.png") as notdef:
     characterMap[0] = ".notdef"
 
 addGlyphsFromDir("./glyphs")
+
+# Duplicate .notdef for U+FFFD (Replacement Character)
+glyphs["uniFFFD"] = glyphs[".notdef"]
+advanceWidths["uniFFFD"] = ADVANCE * SCALE
+characterMap[0xFFFD] = "uniFFFD"
 
 def getFamilyName():
     return "Pixel Code"
@@ -358,7 +363,7 @@ def writeUFO(weight: int = 400, italicAngle: float = 0.0):
     styleNameShort = getStyleNameShort(weight, italicAngle)
     fullName       = f"{familyName} {styleNameShort}".strip()
     majorVersion   = 2
-    minorVersion   = 0
+    minorVersion   = 1
 
     styleMapFamilyName = f"{familyName} {WEIGHT_NAMES[weight]}"
     styleMapStyleName  = "regular"
