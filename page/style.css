@@ -73,6 +73,21 @@ h2, h4 {
 	white-space: pre;
 }
 
+textarea {
+	resize: none;
+	border: none;
+	font-size: 18px;
+	color: var(--fg);
+	box-sizing: border-box;
+	width: 100%;
+}
+
+@media (max-width: 720px) {
+	textarea {
+		font-size: 9px;
+	}
+}
+
 .hi {
 	color: var(--accent);
 	position: relative;
