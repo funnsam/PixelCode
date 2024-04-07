@@ -7,7 +7,7 @@ from fontTools.pens.areaPen import AreaPen
 from fontTools.agl import UV2AGL, AGL2UV
 from ufoLib2.objects import Contour, Glyph, Info, Features, Point
 from ufoLib2 import Font
-from PIL import Image
+from PIL import Image, ImageColor
 from typing import Dict, List, Any
 
 from ufoLib2.objects.info import GaspBehavior, GaspRangeRecord
@@ -228,7 +228,7 @@ def addLigature(parts, path, suffix, lazy = False):
             glyph = atlas.crop((x, 0, x + x_stride, y_stride))
             if lazy:
                 w, h = glyph.size
-                glyph2 = Image.new(glyph.mode, (w + ADVANCE * 2, h), (0, 0, 0))
+                glyph2 = Image.new(glyph.mode, (w + ADVANCE * 2, h), ImageColor.getcolor("#000000", glyph.mode))
                 glyph2.paste(glyph, (ADVANCE, 0))
                 glyph = glyph2
 
