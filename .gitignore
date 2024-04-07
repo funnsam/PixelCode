@@ -3,3 +3,6 @@ build/
 archive/
 .venv
 dist
+page/ttf
+page/otf
+page/woff2

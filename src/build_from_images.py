@@ -265,6 +265,12 @@ def addGlyphsFromDir(dir, suffix = ""):
                 scaleFactor = 1 / int(scale[:-1])
             else:
                 scaleFactor = 1
+            if "#" in name:
+                # e.g. "name#2X.png"
+                name, width = name.split("#")
+                widthFactor = int(width[:-1])
+            else:
+                widthFactor = 1
             if name.startswith('"'):
                 if name.endswith("?"):
                     addLigature(name[1:-2], fullPath, suffix, True)
@@ -285,7 +291,7 @@ def addGlyphsFromDir(dir, suffix = ""):
                     print(f"{file}: {atlas.width}x{atlas.height}, {start}-{end}")
                     atlas = atlas.convert("1")
 
-                    x_stride = int(STRIDE_X / scaleFactor)
+                    x_stride = int(STRIDE_X * widthFactor / scaleFactor)
                     y_stride = int(STRIDE_Y / scaleFactor)
 
                     c = start

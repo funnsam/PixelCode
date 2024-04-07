@@ -1,0 +1,276 @@
+@import './css/all.css';
+
+:root {
+	--bg:   #1f1b1a;
+	--bg-2: #2e2827;
+	--fg:   #fffae5;
+	--fg-2: #d9d1b2;
+	--accent: #feb4d5;
+}
+
+html {
+	display: grid;
+	justify-items: center;
+}
+
+body {
+	filter: contrast(1);
+	background-color: var(--bg);
+	color: var(--fg);
+	width: 80ch;
+	margin-left: 3ch;
+	margin-right: 3ch;
+	margin-top: 4em;
+	line-height: 1.55;
+	font-size: 18px;
+}
+
+* {
+	font-family: "Pixel Code", monospace !important;
+	-webkit-font-smoothing: none;
+	-moz-osx-font-smoothing: grayscale;
+	font-smooth: never;
+}
+
+@media (max-width: 720px) {
+	body {
+		font-size: 9px;
+	}
+}
+
+p {
+	margin: 2ex 0;
+}
+
+.r {
+	font-weight: normal !important;
+	color: var(--fg);
+}
+
+h1, h2, h3, h4 {
+	text-align: center;
+	font-weight: normal;
+}
+
+h3 {
+	color: var(--accent);
+}
+
+h2, h4 {
+	margin-top: -1em;
+	font-weight: normal;
+}
+
+.ex {
+	outline: 0.125em solid var(--fg-2);
+	padding: 1.5em;
+	background-color: var(--bg-2);
+	box-shadow: 0 0.25em 0.5em #000000;
+	white-space: pre-line;
+}
+
+.ex > * {
+	white-space: pre;
+}
+
+.hi {
+	color: var(--accent);
+	position: relative;
+}
+
+label {
+	user-select: none;
+	-webkit-user-select: none;
+}
+
+input[type="checkbox"] {
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+	font-size: 100%;
+	width: 1.5em; height: 1.5em;
+	background-color: #000000;
+	vertical-align: -0.5em;
+	position: relative;
+	outline: 0.125em solid var(--fg-2);
+	cursor: pointer;
+}
+input[type="checkbox"]::after {
+	font-size: 150%;
+	content: "X";
+	color: var(--fg);
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	text-align: center;
+	line-height: 1;
+	left: 0.0625em;
+}
+input:checked {
+	background-color: var(--fg);
+}
+input:checked::after {
+	content: "✓";
+	color: #000000;
+}
+input + label {
+	cursor: pointer;
+}
+
+a {
+	color: var(--accent);
+	text-decoration-style: dotted;
+}
+
+a:hover,
+a:focus-visible {
+	text-decoration-style: solid;
+}
+
+a.button {
+	font-size: 125%;
+	border: 0.125em solid var(--fg);
+	padding: 0.5em 1.5em;
+	margin: 0 1em;
+	background-color: var(--accent);
+	color: #000000;
+	font-weight: 400;
+	text-shadow: none;
+	box-shadow: 0 0 1em #000000;
+	text-decoration: none;
+}
+
+a.button:hover,
+a.button:focus-visible {
+	background-color: var(--fg);
+	text-decoration: underline;
+}
+
+details {
+	background-color: var(--bg-2);
+	position: relative;
+	overflow: hidden;
+	box-shadow: inset 0 0 0.5em #000000;
+}
+
+details summary {
+	cursor: pointer;
+	text-decoration: underline;
+	text-decoration-style: dashed;
+	padding: 1em;
+}
+
+details summary:hover,
+details summary:focus-visible {
+	text-decoration-style: solid;
+}
+
+details summary::-webkit-details-marker,
+details summary::marker {
+	content: none;
+	display: none;
+}
+
+details summary::before {
+	content: '->';
+	width: 3em;
+	text-align: center;
+	float: left;
+}
+
+details summary:hover::before,
+details summary:focus-visible::before {
+	color: var(--accent);
+}
+
+details[open] summary {
+	text-decoration: none;
+}
+
+details[open] summary::before {
+	content: '\\/';
+}
+
+details summary > * {
+	display: inline;
+}
+
+details > :not(summary) {
+	margin: 0 1.5em 1.5em;
+}
+
+
+.bottom-spacer {
+	height: 16em;
+}
+
+.justified {
+	text-align: justify;
+	text-justify: distribute;
+	text-justify: inter-character;
+}
+
+.download-section {
+	text-align: center;
+	margin: 1ex 0;
+	padding: 5ex 0;
+	box-shadow: inset 0 0 0.5em #000000;
+	background-color: var(--bg-2);
+}
+
+.noliga {
+	font-feature-settings: "liga" 0;
+}
+
+.w100 {
+	font-weight: 100;
+}
+.w200 {
+	font-weight: 200;
+}
+.w300 {
+	font-weight: 300;
+}
+.w400 {
+	font-weight: 400;
+}
+.w500 {
+	font-weight: 500;
+}
+.w600 {
+	font-weight: 600;
+}
+.w700 {
+	font-weight: 700;
+}
+.w800 {
+	font-weight: 800;
+}
+.w900 {
+	font-weight: 900;
+}
+.w950 {
+	font-weight: 950;
+}
+
+.prop {
+	color: #fbec68;
+}
+.keyword {
+	color: #df98fe;
+}
+.verb {
+	font-style: italic;
+	color: #e88484;
+}
+.key {
+	color: #5ee89e;
+}
+.comment {
+	color: #777;
+	font-style: italic;
+}
+
+.weight-change {
+	cursor: pointer;
+}
