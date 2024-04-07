@@ -12,7 +12,7 @@ jobs:
       - name: Build font
         run: |
           cd src
-          ./build.sh
+          ./build_without_venv.sh
       - name: Upload font
         uses: actions/upload-artifact@v4
         with:
