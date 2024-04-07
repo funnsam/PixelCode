@@ -30,6 +30,7 @@ jobs:
       - name: Upload font
         uses: actions/upload-artifact@v4
         with:
+          name: "Font files"
           path: dist
       - name: Page upload preparations
         run: |
