@@ -11,4 +11,5 @@ fontmake -u ../build/*.ufo -o ttf --output-dir ../dist/ttf
 
 # Create woff2 fonts from the TTFs.
 ls ../dist/ttf/*.ttf | xargs -I {} woff2_compress {}
+mkdir ../dist/woff2
 mv ../dist/ttf/*.woff2 ../dist/woff2
