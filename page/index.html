@@ -34,7 +34,7 @@
 		I hope you enjoy the font, I put a lot of work in to it!
 		</p>
 		<p class="download-section">
-		<a href="https://github.com/qwerasd205/PixelCode/releases/latest" rel="noreferrer noopener" class="button">Download</a>
+		<a href="font.zip" rel="noreferrer noopener" class="button">Download</a>
 		</p>
 		<h3>Quick Start</h3>
 		<h4>How do I use this?</h4>
@@ -246,6 +246,7 @@
 			let onum = false;
 			let liga = true;
 			let ss01 = false;
+			let ss02 = false;
 			const update_style = () => {
 				document.body.style.fontFeatureSettings
 					= `"calt" ${+calt
@@ -310,12 +311,10 @@
 			const fira_progress_bar = document.getElementById("fira_progress_bar");
 			let idx = 0;
 
-			document.addEventListener("DOMContentLoaded", (event) => {
-				setInterval(() => {
-					fira_progress_bar.innerText = PROGRESS_BARS[idx];
-					idx = (idx + 1) % PROGRESS_BARS.length;
-				}, 250);
-			});
+			setInterval(() => {
+				fira_progress_bar.innerText = PROGRESS_BARS[idx];
+				idx = (idx + 1) % PROGRESS_BARS.length;
+			}, 250);
 		</script>
 	</body>
 </html>

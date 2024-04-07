@@ -172,7 +172,7 @@ details summary::marker {
 }
 
 details summary::before {
-	content: '->';
+	content: "→";
 	width: 3em;
 	text-align: center;
 	float: left;
@@ -188,7 +188,7 @@ details[open] summary {
 }
 
 details[open] summary::before {
-	content: '\\/';
+	content: "↓";
 }
 
 details summary > * {
