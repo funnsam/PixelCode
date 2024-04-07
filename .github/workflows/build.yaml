@@ -1,7 +1,21 @@
-name: "Build font"
+name: "Build font and deploy page"
+
 on: push
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
 jobs:
-  build:
+  build_and_deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -17,3 +31,14 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           path: dist
+      - name: Page upload preparations
+        run: |
+          mv dist/* page/
+      - name: Upload page
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: page
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
