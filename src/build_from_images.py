@@ -235,7 +235,7 @@ def addLigature(parts, path, suffix, lazy = False):
             name = partNames[i]
             glyphs[name] = makeGlyph(name, glyph)
             ligaGlyphOrder.append(name)
-            advanceWidths[name] = ADVANCE * SCALE
+            advanceWidths[name] = (ADVANCE + 2 if lazy else 0) * SCALE
             i += 1
 
         glyphs[ligaName] = makeGlyph(ligaName, atlas.crop((0, 0, 0, 0)))
