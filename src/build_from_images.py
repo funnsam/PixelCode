@@ -226,6 +226,12 @@ def addLigature(parts, path, suffix, lazy = False):
         i = 0
         for x in range(0, atlas.width, x_stride):
             glyph = atlas.crop((x, 0, x + x_stride, y_stride))
+            if lazy:
+                w, h = glyth.size
+                glyth2 = Image.new(glyth.mode, (w + ADVANCE * 2, h), (0, 0, 0))
+                glyth2.paste(glyth, (ADVANCE, 0))
+                glyth = glyth2
+
             name = partNames[i]
             glyphs[name] = makeGlyph(name, glyph)
             ligaGlyphOrder.append(name)
