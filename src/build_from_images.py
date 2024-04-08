@@ -2,7 +2,7 @@ import os
 import sys
 import math
 from math import sqrt
-# from fontTools.designspaceLib import DesignSpaceDocument
+from fontTools.designspaceLib import DesignSpaceDocument
 from fontTools.pens.areaPen import AreaPen
 from fontTools.agl import UV2AGL, AGL2UV
 from ufoLib2.objects import Contour, Glyph, Info, Features, Point
@@ -48,7 +48,7 @@ def makeGlyph(name: str, img: Image.Image):
     vectors: List[List[Any]] = [[list([0, 0]) for _ in range(img.height + 1)] for _ in range(img.width + 1)]
     for y in range(0, img.height):
         for x in range(0, img.width):
-            if not img.getpixel((x, y)) == 0:
+            if img.getpixel((x, y)) != 0:
                 vectors[x][y][0] -= 1
                 vectors[x][y][1] += 1
                 vectors[x][y+1][0] += 1
@@ -220,27 +220,28 @@ def addLigature(parts, path, suffix, lazy = False):
         print(f"\"{''.join([chr(getOrd(c)) for c in parts])}\": {atlas.width}x{atlas.height}")
         atlas = atlas.convert("1")
 
+        if lazy:
+            w, h = atlas.size
+            atlas2 = Image.new(atlas.mode, (w + ADVANCE * 2, h), ImageColor.getcolor("#000000", atlas.mode))
+            atlas2.paste(atlas, (ADVANCE, 0))
+            atlas = atlas2
+            partNames.insert(0, f"{ligaName}.space_start")
+            partNames.append(f"{ligaName}.space_end")
+
         x_stride = int(STRIDE_X / scaleFactor)
         y_stride = int(STRIDE_Y / scaleFactor)
 
-        i = 0
-        for x in range(0, atlas.width, x_stride):
+        for i, x in enumerate(range(0, atlas.width, x_stride)):
             glyph = atlas.crop((x, 0, x + x_stride, y_stride))
-            if lazy:
-                w, h = glyph.size
-                glyph2 = Image.new(glyph.mode, (w + ADVANCE * 2, h), ImageColor.getcolor("#000000", glyph.mode))
-                glyph2.paste(glyph, (ADVANCE, 0))
-                glyph = glyph2
 
             name = partNames[i]
             glyphs[name] = makeGlyph(name, glyph)
             ligaGlyphOrder.append(name)
             advanceWidths[name] = ADVANCE * SCALE
-            i += 1
 
         glyphs[ligaName] = makeGlyph(ligaName, atlas.crop((0, 0, 0, 0)))
         ligaGlyphOrder.append(ligaName)
-        advanceWidths[ligaName] = (ADVANCE + 2 if lazy else 0) * SCALE
+        advanceWidths[ligaName] = ADVANCE * SCALE
 
         ligatures.append({
             "name": ligaName,
@@ -305,9 +306,7 @@ def addGlyphsFromDir(dir, suffix = ""):
                         for x in range(0, atlas.width, x_stride):
                             glyph = atlas.crop((x, y, x + x_stride, y + y_stride))
                             if c in WHITESPACE_GLYPHS or len(glyph.getcolors() or ()) > 1:
-                                name = glyphName(c)
-                                if suffix:
-                                    name = f"{name}{suffix}"
+                                name = f"{glyphName(c)}{suffix}"
                                 glyphs[name] = makeGlyph(name, glyph)
                                 advanceWidths[name] = ADVANCE * SCALE
                                 if not suffix:
@@ -522,21 +521,21 @@ if not os.path.exists("../build"):
 if not os.path.exists("../build/instances"):
     os.mkdir("../build/instances")
 
-# doc = DesignSpaceDocument()
-# doc.addAxisDescriptor(
-#     maximum = 950,
-#     minimum = 100,
-#     default = 400,
-#     name    = "weight",
-#     tag     = "wght",
-# )
-# doc.addAxisDescriptor(
-#     maximum = 14,
-#     minimum = 0,
-#     default = 0,
-#     name    = "slant",
-#     tag     = "slnt",
-# )
+doc = DesignSpaceDocument()
+doc.addAxisDescriptor(
+    maximum = 950,
+    minimum = 100,
+    default = 400,
+    name    = "weight",
+    tag     = "wght",
+)
+doc.addAxisDescriptor(
+    maximum = 14,
+    minimum = 0,
+    default = 0,
+    name    = "slant",
+    tag     = "slnt",
+)
 
 MASTER_WEIGHTS = [100, 400, 950]
 
@@ -545,69 +544,67 @@ genWeights = WEIGHT_NAMES.keys() if len(sys.argv) < 2 else map(int, sys.argv[1:]
 for weight in genWeights:
     regularPath = writeUFO(weight)
     italicPath  = writeUFO(weight, 14)
-    #
-    # if weight in MASTER_WEIGHTS:
-    #     doc.addSourceDescriptor(
-    #         path = regularPath,
-    #         name = f"master.PixelCode.{getStyleName(weight)}",
-    #         familyName = getFamilyName(),
-    #         styleName  = getStyleName(weight),
-    #         location = dict(weight = weight, slant = 0),
-    #         copyLib = True,
-    #         copyInfo = True,
-    #         copyGroups = True,
-    #         copyFeatures = True,
-    #     )
-    #     doc.addSourceDescriptor(
-    #         path = italicPath,
-    #         name = f"master.PixelCode.{getStyleName(weight, 14)}",
-    #         familyName = getFamilyName(),
-    #         styleName  = getStyleName(weight, 14),
-    #         location = dict(weight = weight, slant = 14),
-    #         copyLib = True,
-    #         copyInfo = True,
-    #         copyGroups = True,
-    #         copyFeatures = True,
-    #     )
-    #
-    # doc.addInstanceDescriptor(
-    #     name = f"instance_{getStyleName(weight)}",
-    #     familyName = getFamilyName(),
-    #     styleName  = getStyleName(weight),
-    #     path       = os.path.abspath(f"../build/instances/{getFullNameShort(weight)}.ufo"),
-    #     location   = dict(weight = weight, slant = 0),
-    #     kerning    = False,
-    #     info       = True,
-    #     postScriptFontName = getFullNameShort(weight),
-    #     styleMapFamilyName = getFamilyName(),
-    #     styleMapStyleName  = getStyleName(weight),
-    # )
-    # doc.addInstanceDescriptor(
-    #     name = f"instance_{getStyleName(weight, 14)}",
-    #     familyName = getFamilyName(),
-    #     styleName  = getStyleName(weight, 14),
-    #     path       = os.path.abspath(f"../build/instances/{getFullNameShort(weight, 14)}.ufo"),
-    #     location   = dict(weight = weight, slant = 14),
-    #     kerning    = False,
-    #     info       = True,
-    #     postScriptFontName = getFullNameShort(weight, 14),
-    #     styleMapFamilyName = getFamilyName(),
-    #     styleMapStyleName  = getStyleName(weight, 14),
-    # )
-#
-# doc.addInstanceDescriptor(
-#     name = "instance_Italic",
-#     familyName = getFamilyName(),
-#     styleName  = "Italic",
-#     path       = os.path.abspath(f"../build/instances/{getFamilyName().replace(" ", "")}-Italic.ufo"),
-#     location   = dict(weight = 400, slant = 14),
-#     kerning    = False,
-#     info       = True,
-#     postScriptFontName = f"{getFamilyName().replace(" ", "")}-Italic",
-#     styleMapFamilyName = getFamilyName(),
-#     styleMapStyleName  = "Italic",
-# )
-#
-# doc.write("../build/PixelCode.designspace")
 
+    if weight in MASTER_WEIGHTS:
+        doc.addSourceDescriptor(
+            path = regularPath,
+            name = f"master.PixelCode.{getStyleName(weight)}",
+            familyName = getFamilyName(),
+            styleName  = getStyleName(weight),
+            location = dict(weight = weight, slant = 0),
+            copyLib = True,
+            copyInfo = True,
+            copyGroups = True,
+            copyFeatures = True,
+        )
+        doc.addSourceDescriptor(
+            path = italicPath,
+            name = f"master.PixelCode.{getStyleName(weight, 14)}",
+            familyName = getFamilyName(),
+            styleName  = getStyleName(weight, 14),
+            location = dict(weight = weight, slant = 14),
+            copyLib = True,
+            copyInfo = True,
+            copyGroups = True,
+            copyFeatures = True,
+        )
 
+    doc.addInstanceDescriptor(
+        name = f"instance_{getStyleName(weight)}",
+        familyName = getFamilyName(),
+        styleName  = getStyleName(weight),
+        path       = os.path.abspath(f"../build/instances/{getFullNameShort(weight)}.ufo"),
+        location   = dict(weight = weight, slant = 0),
+        kerning    = False,
+        info       = True,
+        postScriptFontName = getFullNameShort(weight),
+        styleMapFamilyName = getFamilyName(),
+        styleMapStyleName  = getStyleName(weight),
+    )
+    doc.addInstanceDescriptor(
+        name = f"instance_{getStyleName(weight, 14)}",
+        familyName = getFamilyName(),
+        styleName  = getStyleName(weight, 14),
+        path       = os.path.abspath(f"../build/instances/{getFullNameShort(weight, 14)}.ufo"),
+        location   = dict(weight = weight, slant = 14),
+        kerning    = False,
+        info       = True,
+        postScriptFontName = getFullNameShort(weight, 14),
+        styleMapFamilyName = getFamilyName(),
+        styleMapStyleName  = getStyleName(weight, 14),
+    )
+
+doc.addInstanceDescriptor(
+    name = "instance_Italic",
+    familyName = getFamilyName(),
+    styleName  = "Italic",
+    path       = os.path.abspath(f"../build/instances/{getFamilyName().replace(' ', '')}-Italic.ufo"),
+    location   = dict(weight = 400, slant = 14),
+    kerning    = False,
+    info       = True,
+    postScriptFontName = f"{getFamilyName().replace(' ', '')}-Italic",
+    styleMapFamilyName = getFamilyName(),
+    styleMapStyleName  = "Italic",
+)
+
+doc.write("../build/PixelCode.designspace")

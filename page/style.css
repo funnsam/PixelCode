@@ -1,4 +1,4 @@
-@import './css/all.css';
+@import './css/PixelCode-VF.css';
 
 :root {
 	--bg:   #1f1b1a;
@@ -74,12 +74,14 @@ h2, h4 {
 }
 
 textarea {
-	resize: none;
+	resize: vertical;
 	border: none;
 	font-size: 18px;
 	color: var(--fg);
 	box-sizing: border-box;
 	width: 100%;
+	white-space: pre-wrap;
+	font-feature-settings: inherit;
 }
 
 @media (max-width: 720px) {

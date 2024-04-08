@@ -2,8 +2,8 @@
 python3 build_from_images.py || exit 1
 
 # Variable font (experimental)
-# fontmake ../build/PixelCode.designspace -o variable --output-dir ../dist/variable
-# woff2_compress ../dist/variable/*.ttf
+fontmake ../build/PixelCode.designspace -o variable --output-dir ../dist/variable
+woff2_compress ../dist/variable/*.ttf
 
 # Call fontmake to build the UFOs in to OTF and TTF fonts.
 fontmake -u ../build/*.ufo -o otf --output-dir ../dist/otf || exit 1
