@@ -6,3 +6,6 @@ dist
 page/ttf
 page/otf
 page/woff2
+page/variable
+dist
+nerd-fonts

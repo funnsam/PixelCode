@@ -4,4 +4,5 @@ cd ..
 rm page/ttf -rf
 rm page/otf -rf
 rm page/woff2 -rf
-mv dist/* page/
+rm page/variable -rf
+cp dist/* page/ -r
